@@ -470,7 +470,7 @@
   // ── Language switch ──────────────────────────────────
   function setLang(lang) {
     document.querySelectorAll('.kk').forEach(el => el.style.display = lang === 'kk' ? '' : 'none');
-    document.querySelectorAll('.ru').forEach(el => el.style.display = lang === 'ru' ? '' : 'none');
+    document.querySelectorAll('.ru').forEach(el => el.style.display = lang === 'ru' ? 'inline' : 'none');
     document.getElementById('btn-kk').classList.toggle('active', lang === 'kk');
     document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
     localStorage.setItem('vibeLang', lang);

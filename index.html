@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibe Coding — Шынайы Пікір / Честный Отзыв</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:      #080808;
+      --card:    #101010;
+      --border:  #1e1e1e;
+      --line:    #2a2a2a;
+      --text:    #efefef;
+      --muted:   #777;
+      --dim:     #aaa;
+      --white:   #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 18px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── Language toggle ────────────────────────────────── */
+    .lang-bar {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 200;
+      display: flex;
+      gap: 6px;
+    }
+    .lang-btn {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      padding: 7px 18px;
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color .3s, color .3s;
+    }
+    .lang-btn:hover { border-color: #555; color: #ccc; }
+    .lang-btn.active { border-color: var(--white); color: var(--white); }
+
+    /* ── Language visibility ────────────────────────────── */
+    .ru { display: none; }
+
+    /* ── Noise overlay ──────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HERO ───────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 80px;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,255,255,.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-photo-wrap {
+      position: relative;
+      margin-bottom: 44px;
+      animation: zoomIn .9s ease both;
+    }
+    .hero-photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      display: block;
+    }
+    .hero-photo-placeholder {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+    }
+    .hero-photo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.07);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 5vw, 54px);
+      font-weight: 400;
+      letter-spacing: 1px;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      animation: slideUp .9s ease .15s both;
+    }
+    .hero-author {
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+      animation: slideUp .9s ease .3s both;
+    }
+    .hero-intro {
+      font-size: clamp(16px, 2.2vw, 22px);
+      font-style: italic;
+      color: var(--dim);
+      max-width: 620px;
+      animation: slideUp .9s ease .45s both;
+    }
+    .hero-line {
+      width: 50px;
+      height: 1px;
+      background: var(--line);
+      margin: 28px auto;
+      animation: slideUp .9s ease .6s both;
+    }
+
+    /* ── TIMELINE ───────────────────────────────────────── */
+    .timeline-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+    }
+    .timeline-section::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--line) 8%, var(--line) 92%, transparent);
+      transform: translateX(-50%);
+    }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 1fr 24px 1fr;
+      gap: 0 32px;
+      margin-bottom: 72px;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .tl-item.visible { opacity: 1; transform: translateY(0); }
+
+    .tl-item:nth-child(odd) .tl-card  { grid-column: 1; grid-row: 1; text-align: right; }
+    .tl-item:nth-child(odd) .tl-empty { grid-column: 2; grid-row: 1; }
+    .tl-item:nth-child(odd) .tl-videos { grid-column: 3; grid-row: 1; }
+
+    .tl-item:nth-child(even) .tl-videos { grid-column: 1; grid-row: 1; }
+    .tl-item:nth-child(even) .tl-empty  { grid-column: 2; grid-row: 1; }
+    .tl-item:nth-child(even) .tl-card   { grid-column: 3; grid-row: 1; text-align: left; }
+
+    .tl-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--white);
+      margin: 22px auto 0;
+      position: relative;
+      z-index: 2;
+    }
+    .tl-dot::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+
+    .tl-card {
+      padding: 8px 0 16px;
+    }
+    .tl-day {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .tl-heading {
+      font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .tl-videos {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-top: 4px;
+    }
+
+    .vid-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .vid-block video {
+      width: 100%;
+      display: block;
+      background: #000;
+    }
+    .vid-label {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      padding: 8px 12px;
+      text-transform: uppercase;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── CLOSING ────────────────────────────────────────── */
+    .closing {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px 24px 80px;
+      text-align: center;
+    }
+    .closing-quote {
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-style: italic;
+      color: var(--dim);
+      line-height: 1.8;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .closing-quote.visible { opacity: 1; transform: translateY(0); }
+
+    .thanks-wrap {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .7s ease .2s, transform .7s ease .2s;
+    }
+    .thanks-wrap.visible { opacity: 1; transform: translateY(0); }
+
+    .closing-line {
+      width: 50px;
+      height: 1px;
+      background: var(--line);
+      margin: 0 auto 28px;
+    }
+    .thanks-text {
+      font-size: clamp(16px, 2.2vw, 21px);
+      color: var(--dim);
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── ANIMATIONS ─────────────────────────────────────── */
+    @keyframes zoomIn  { from { opacity:0; transform:scale(.85); } to { opacity:1; transform:scale(1); } }
+    @keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes pulse   { 0%,100% { transform:scale(1); opacity:.5; } 50% { transform:scale(1.06); opacity:1; } }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 680px) {
+      .timeline-section::before { left: 18px; }
+
+      .tl-item,
+      .tl-item:nth-child(even),
+      .tl-item:nth-child(odd) {
+        display: flex;
+        flex-direction: column;
+        padding-left: 44px;
+        gap: 12px;
+      }
+      .tl-item:nth-child(odd) .tl-card,
+      .tl-item:nth-child(even) .tl-card  { text-align: left; }
+      .tl-empty { display: none; }
+
+      .tl-dot {
+        position: absolute;
+        left: 14px;
+        margin-top: 22px;
+      }
+      .tl-item { position: relative; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Language Bar -->
+<div class="lang-bar">
+  <button class="lang-btn active" id="btn-kk" onclick="setLang('kk')">ҚАЗ</button>
+  <button class="lang-btn"        id="btn-ru" onclick="setLang('ru')">РУС</button>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-photo-wrap">
+    <img
+      class="hero-photo"
+      src="assets/images/photo.jpg"
+      alt=""
+      onerror="this.style.display='none'; document.getElementById('ph').style.display='flex'"
+    />
+    <div class="hero-photo-placeholder" id="ph" style="display:none">👩</div>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="kk">Vibe Coding курсына<br>шынайы пікірім</span>
+    <span class="ru">Честный отзыв<br>о курсе Vibe Coding</span>
+  </h1>
+
+  <p class="hero-author">
+    <span class="kk">Курс авторы: Азат Ержан</span>
+    <span class="ru">Автор курса: Азат Ержан</span>
+  </p>
+
+  <div class="hero-line"></div>
+
+  <p class="hero-intro">
+    <span class="kk">Мен 5 баланың анасымын, жасым 33-те.<br>Осы курсты алып, шынайы пікіріммен бөлісіп жатырмын.</span>
+    <span class="ru">Я мама 5 детей, мне 33 года.<br>Делюсь своим честным мнением об этом курсе.</span>
+  </p>
+</section>
+
+<!-- ═══════════════ TIMELINE ═══════════════ -->
+<div class="timeline-section">
+
+  <!-- ① 26 наурыз — 1-күн -->
+  <div class="tl-item">
+    <div class="tl-card">
+      <p class="tl-day">
+        <span class="kk">26 наурыз</span>
+        <span class="ru">26 марта</span>
+      </p>
+      <h2 class="tl-heading">
+        <span class="kk">Курстың 1-күні</span>
+        <span class="ru">1-й день курса</span>
+      </h2>
+    </div>
+    <div class="tl-empty"><div class="tl-dot"></div></div>
+    <div class="tl-videos">
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video1.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 1</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 9-күн -->
+  <div class="tl-item">
+    <div class="tl-videos">
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video2.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 2</p>
+      </div>
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video3.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 3</p>
+      </div>
+    </div>
+    <div class="tl-empty"><div class="tl-dot"></div></div>
+    <div class="tl-card">
+      <p class="tl-day">
+        <span class="kk">Курстың 9-күні</span>
+        <span class="ru">9-й день курса</span>
+      </p>
+      <h2 class="tl-heading">
+        <span class="kk">Видео 2 және 3</span>
+        <span class="ru">Видео 2 и 3</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- ③ 15-күн -->
+  <div class="tl-item">
+    <div class="tl-card">
+      <p class="tl-day">
+        <span class="kk">Курстың 15-күні</span>
+        <span class="ru">15-й день курса</span>
+      </p>
+      <h2 class="tl-heading">
+        <span class="kk">Видео 4, 5 және 9</span>
+        <span class="ru">Видео 4, 5 и 9</span>
+      </h2>
+    </div>
+    <div class="tl-empty"><div class="tl-dot"></div></div>
+    <div class="tl-videos">
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video4.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 4</p>
+      </div>
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video5.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 5</p>
+      </div>
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video9.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 9</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ 25-күн -->
+  <div class="tl-item">
+    <div class="tl-videos">
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video6.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 6</p>
+      </div>
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video7.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 7</p>
+      </div>
+    </div>
+    <div class="tl-empty"><div class="tl-dot"></div></div>
+    <div class="tl-card">
+      <p class="tl-day">
+        <span class="kk">Курстың 25-күні</span>
+        <span class="ru">25-й день курса</span>
+      </p>
+      <h2 class="tl-heading">
+        <span class="kk">Видео 6 және 7</span>
+        <span class="ru">Видео 6 и 7</span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- ⑤ 1 ай — қорытынды -->
+  <div class="tl-item">
+    <div class="tl-card">
+      <p class="tl-day">
+        <span class="kk">1 ай өтті</span>
+        <span class="ru">Прошёл 1 месяц</span>
+      </p>
+      <h2 class="tl-heading">
+        <span class="kk">Қорытынды</span>
+        <span class="ru">Итоги</span>
+      </h2>
+    </div>
+    <div class="tl-empty"><div class="tl-dot"></div></div>
+    <div class="tl-videos">
+      <div class="vid-block">
+        <video controls preload="metadata">
+          <source src="assets/videos/video8.mp4" type="video/mp4">
+        </video>
+        <p class="vid-label">Видео 8</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /timeline -->
+
+<!-- ═══════════════ CLOSING ═══════════════ -->
+<section class="closing">
+  <p class="closing-quote">
+    <span class="kk">Әлі ашылмаған 10-нан астам видео сабақ бар.<br>
+    Онда не бар екенін білмеймін,<br>ашылуын асыға күтіп отырмын.</span>
+    <span class="ru">Есть ещё более 10 видеоуроков, которые ещё не открылись.<br>
+    Не знаю, что там —<br>с нетерпением жду открытия.</span>
+  </p>
+
+  <div class="thanks-wrap">
+    <div class="closing-line"></div>
+    <p class="thanks-text">
+      <span class="kk">Осы курстың авторы Азат мырзаға үлкен рақмет!</span>
+      <span class="ru">Огромная благодарность автору курса господину Азату!</span>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <span class="kk">Vibe Coding · Азат Ержан</span>
+  <span class="ru">Vibe Coding · Азат Ержан</span>
+</footer>
+
+<script>
+  // ── Language switch ──────────────────────────────────
+  function setLang(lang) {
+    document.querySelectorAll('.kk').forEach(el => el.style.display = lang === 'kk' ? '' : 'none');
+    document.querySelectorAll('.ru').forEach(el => el.style.display = lang === 'ru' ? '' : 'none');
+    document.getElementById('btn-kk').classList.toggle('active', lang === 'kk');
+    document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+    localStorage.setItem('vibeLang', lang);
+  }
+
+  // Init language
+  setLang(localStorage.getItem('vibeLang') || 'kk');
+
+  // ── Scroll animations ────────────────────────────────
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.tl-item, .closing-quote, .thanks-wrap').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

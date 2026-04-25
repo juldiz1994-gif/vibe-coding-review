@@ -151,98 +151,95 @@
 
     /* ── TIMELINE ───────────────────────────────────────── */
     .timeline-section {
-      max-width: 860px;
+      max-width: 760px;
       margin: 0 auto;
-      padding: 40px 24px 80px;
-      position: relative;
-    }
-    .timeline-section::before {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, transparent, var(--line) 8%, var(--line) 92%, transparent);
-      transform: translateX(-50%);
+      padding: 20px 24px 80px;
     }
 
-    .tl-item {
-      display: grid;
-      grid-template-columns: 1fr 24px 1fr;
-      gap: 0 32px;
-      margin-bottom: 72px;
+    .day-card {
+      border: 1px solid var(--border);
+      background: var(--card);
+      margin-bottom: 48px;
       opacity: 0;
-      transform: translateY(32px);
+      transform: translateY(28px);
       transition: opacity .65s ease, transform .65s ease;
     }
-    .tl-item.visible { opacity: 1; transform: translateY(0); }
+    .day-card.visible { opacity: 1; transform: translateY(0); }
 
-    .tl-item:nth-child(odd) .tl-card  { grid-column: 1; grid-row: 1; text-align: right; }
-    .tl-item:nth-child(odd) .tl-empty { grid-column: 2; grid-row: 1; }
-    .tl-item:nth-child(odd) .tl-videos { grid-column: 3; grid-row: 1; }
-
-    .tl-item:nth-child(even) .tl-videos { grid-column: 1; grid-row: 1; }
-    .tl-item:nth-child(even) .tl-empty  { grid-column: 2; grid-row: 1; }
-    .tl-item:nth-child(even) .tl-card   { grid-column: 3; grid-row: 1; text-align: left; }
-
-    .tl-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--white);
-      margin: 22px auto 0;
-      position: relative;
-      z-index: 2;
+    .day-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border);
+      background: #0d0d0d;
     }
-    .tl-dot::after {
-      content: '';
-      position: absolute;
-      inset: -5px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.15);
+    .day-num {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 300;
+      color: rgba(255,255,255,.12);
+      line-height: 1;
+      min-width: 60px;
+      text-align: center;
+      font-style: italic;
     }
-
-    .tl-card {
-      padding: 8px 0 16px;
-    }
-    .tl-day {
+    .day-info { flex: 1; }
+    .day-date {
       font-size: 12px;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 8px;
+      display: block;
+      margin-bottom: 4px;
     }
-    .tl-heading {
-      font-size: clamp(20px, 2.8vw, 28px);
+    .day-title {
+      font-size: clamp(22px, 3.5vw, 32px);
       font-weight: 400;
-      line-height: 1.3;
+      line-height: 1.2;
+      color: var(--white);
     }
 
-    .tl-videos {
+    .day-videos {
+      padding: 24px 28px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      padding-top: 4px;
+      gap: 20px;
     }
 
-    .vid-block {
-      background: var(--card);
+    .vid-frame {
       border: 1px solid var(--border);
       overflow: hidden;
     }
-    .vid-block video {
+    .vid-top-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: #0a0a0a;
+      border-bottom: 1px solid var(--border);
+    }
+    .vid-num-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .vid-top-label span {
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .vid-frame video {
       width: 100%;
       display: block;
       background: #000;
-    }
-    .vid-label {
-      font-size: 12px;
-      letter-spacing: 2px;
-      color: var(--muted);
-      padding: 8px 12px;
-      text-transform: uppercase;
-      border-top: 1px solid var(--border);
     }
 
     /* ── CLOSING ────────────────────────────────────────── */
@@ -299,27 +296,10 @@
     @keyframes pulse   { 0%,100% { transform:scale(1); opacity:.5; } 50% { transform:scale(1.06); opacity:1; } }
 
     /* ── RESPONSIVE ─────────────────────────────────────── */
-    @media (max-width: 680px) {
-      .timeline-section::before { left: 18px; }
-
-      .tl-item,
-      .tl-item:nth-child(even),
-      .tl-item:nth-child(odd) {
-        display: flex;
-        flex-direction: column;
-        padding-left: 44px;
-        gap: 12px;
-      }
-      .tl-item:nth-child(odd) .tl-card,
-      .tl-item:nth-child(even) .tl-card  { text-align: left; }
-      .tl-empty { display: none; }
-
-      .tl-dot {
-        position: absolute;
-        left: 14px;
-        margin-top: 22px;
-      }
-      .tl-item { position: relative; }
+    @media (max-width: 600px) {
+      .day-header { padding: 18px 18px; gap: 14px; }
+      .day-videos  { padding: 18px 18px; }
+      .day-num     { font-size: 36px; min-width: 44px; }
     }
   </style>
 </head>
@@ -364,141 +344,148 @@
 <!-- ═══════════════ TIMELINE ═══════════════ -->
 <div class="timeline-section">
 
-  <!-- ① 26 наурыз — 1-күн -->
-  <div class="tl-item">
-    <div class="tl-card">
-      <p class="tl-day">
-        <span class="kk">26 наурыз</span>
-        <span class="ru">26 марта</span>
-      </p>
-      <h2 class="tl-heading">
-        <span class="kk">Курстың 1-күні</span>
-        <span class="ru">1-й день курса</span>
-      </h2>
+  <!-- ① 1-күн -->
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-num">1</div>
+      <div class="day-info">
+        <span class="day-date"><span class="kk">26 наурыз</span><span class="ru">26 марта</span></span>
+        <h2 class="day-title"><span class="kk">Курстың 1-күні</span><span class="ru">1-й день курса</span></h2>
+      </div>
     </div>
-    <div class="tl-empty"><div class="tl-dot"></div></div>
-    <div class="tl-videos">
-      <div class="vid-block">
+    <div class="day-videos">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">1</div>
+          <span>Видео 1</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video1.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 1</p>
       </div>
     </div>
   </div>
 
   <!-- ② 9-күн -->
-  <div class="tl-item">
-    <div class="tl-videos">
-      <div class="vid-block">
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-num">9</div>
+      <div class="day-info">
+        <span class="day-date"><span class="kk">Курстың 9-күні</span><span class="ru">9-й день курса</span></span>
+        <h2 class="day-title"><span class="kk">Видео 2 және 3</span><span class="ru">Видео 2 и 3</span></h2>
+      </div>
+    </div>
+    <div class="day-videos">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">2</div>
+          <span>Видео 2</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video2.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 2</p>
       </div>
-      <div class="vid-block">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">3</div>
+          <span>Видео 3</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video3.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 3</p>
       </div>
-    </div>
-    <div class="tl-empty"><div class="tl-dot"></div></div>
-    <div class="tl-card">
-      <p class="tl-day">
-        <span class="kk">Курстың 9-күні</span>
-        <span class="ru">9-й день курса</span>
-      </p>
-      <h2 class="tl-heading">
-        <span class="kk">Видео 2 және 3</span>
-        <span class="ru">Видео 2 и 3</span>
-      </h2>
     </div>
   </div>
 
   <!-- ③ 15-күн -->
-  <div class="tl-item">
-    <div class="tl-card">
-      <p class="tl-day">
-        <span class="kk">Курстың 15-күні</span>
-        <span class="ru">15-й день курса</span>
-      </p>
-      <h2 class="tl-heading">
-        <span class="kk">Видео 4, 5 және 9</span>
-        <span class="ru">Видео 4, 5 и 9</span>
-      </h2>
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-num">15</div>
+      <div class="day-info">
+        <span class="day-date"><span class="kk">Курстың 15-күні</span><span class="ru">15-й день курса</span></span>
+        <h2 class="day-title"><span class="kk">Видео 4, 5 және 9</span><span class="ru">Видео 4, 5 и 9</span></h2>
+      </div>
     </div>
-    <div class="tl-empty"><div class="tl-dot"></div></div>
-    <div class="tl-videos">
-      <div class="vid-block">
+    <div class="day-videos">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">4</div>
+          <span>Видео 4</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video4.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 4</p>
       </div>
-      <div class="vid-block">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">5</div>
+          <span>Видео 5</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video5.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 5</p>
       </div>
-      <div class="vid-block">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">9</div>
+          <span>Видео 9</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video9.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 9</p>
       </div>
     </div>
   </div>
 
   <!-- ④ 25-күн -->
-  <div class="tl-item">
-    <div class="tl-videos">
-      <div class="vid-block">
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-num">25</div>
+      <div class="day-info">
+        <span class="day-date"><span class="kk">Курстың 25-күні</span><span class="ru">25-й день курса</span></span>
+        <h2 class="day-title"><span class="kk">Видео 6 және 7</span><span class="ru">Видео 6 и 7</span></h2>
+      </div>
+    </div>
+    <div class="day-videos">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">6</div>
+          <span>Видео 6</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video6.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 6</p>
       </div>
-      <div class="vid-block">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">7</div>
+          <span>Видео 7</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video7.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 7</p>
       </div>
-    </div>
-    <div class="tl-empty"><div class="tl-dot"></div></div>
-    <div class="tl-card">
-      <p class="tl-day">
-        <span class="kk">Курстың 25-күні</span>
-        <span class="ru">25-й день курса</span>
-      </p>
-      <h2 class="tl-heading">
-        <span class="kk">Видео 6 және 7</span>
-        <span class="ru">Видео 6 и 7</span>
-      </h2>
     </div>
   </div>
 
-  <!-- ⑤ 1 ай — қорытынды -->
-  <div class="tl-item">
-    <div class="tl-card">
-      <p class="tl-day">
-        <span class="kk">1 ай өтті</span>
-        <span class="ru">Прошёл 1 месяц</span>
-      </p>
-      <h2 class="tl-heading">
-        <span class="kk">Қорытынды</span>
-        <span class="ru">Итоги</span>
-      </h2>
+  <!-- ⑤ Қорытынды -->
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-num">✓</div>
+      <div class="day-info">
+        <span class="day-date"><span class="kk">1 ай өтті</span><span class="ru">Прошёл 1 месяц</span></span>
+        <h2 class="day-title"><span class="kk">Қорытынды</span><span class="ru">Итоги</span></h2>
+      </div>
     </div>
-    <div class="tl-empty"><div class="tl-dot"></div></div>
-    <div class="tl-videos">
-      <div class="vid-block">
+    <div class="day-videos">
+      <div class="vid-frame">
+        <div class="vid-top-label">
+          <div class="vid-num-badge">8</div>
+          <span>Видео 8</span>
+        </div>
         <video controls preload="metadata">
           <source src="assets/videos/video8.mp4" type="video/mp4">
         </video>
-        <p class="vid-label">Видео 8</p>
       </div>
     </div>
   </div>
@@ -546,7 +533,7 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.12 });
 
-  document.querySelectorAll('.tl-item, .closing-quote, .thanks-wrap').forEach(el => io.observe(el));
+  document.querySelectorAll('.day-card, .closing-quote, .thanks-wrap').forEach(el => io.observe(el));
 </script>
 
 </body>
